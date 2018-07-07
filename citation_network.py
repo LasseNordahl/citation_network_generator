@@ -1,21 +1,68 @@
 import PyPDF2
 import os
+import csv
+
+PDF_DIRECTORY = 'test_pdfs/'
+CSV_DIRECTORY = 'node_csvs/'
+NODE_CSV_NAME = 'test.csv'
+
 
 def main():
 
-	for filename in os.listdir('research_pdfs'):
-		print_pdf_contents('research_pdfs/' + filename)
+	research_node = create_nodes_from_csv(CSV_DIRECTORY + NODE_CSV_NAME)
 
-def print_pdf_contents(o_file):
+	print(research_node)
 
-	pdf_object = open(o_file, 'rb')
+	for filename in os.listdir(PDF_DIRECTORY):
+		if filename != '.DS_Store':
+			# print_pdf_contents(PDF_DIRECTORY, filename)
+			map_citation_network(research_node, PDF_DIRECTORY, filename)
 
+
+def print_pdf_contents(directory_name, filename):
+
+	pdf_object = open(directory_name + filename, 'rb')
+
+	try:
+		pdf_reader = PyPDF2.PdfFileReader(pdf_object)
+		for page_number in range(pdf_reader.numPages):
+			page_object = pdf_reader.getPage(page_number)
+			print(page_object.extractText())
+	except:
+		print(o_file, 'broken file') 
+
+
+def map_citation_network(research_node, directory_name, filename):
+
+	pdf_object = open(directory_name + filename, 'rb')
 	pdf_reader = PyPDF2.PdfFileReader(pdf_object)
+
+	paper_date = filename[:4]
 
 	for page_number in range(pdf_reader.numPages):
 		page_object = pdf_reader.getPage(page_number)
 		print(page_object.extractText())
 
-if __name__ == "__main__":
 
+def calculate_references(research_node, file_text):
+
+	for key, value in research_node.iteritems():
+		
+
+
+def create_nodes_from_csv(csv_filename):
+
+	research_node = {}
+
+	with open(csv_filename, 'rb') as csv_file:
+
+		csv_reader = csv.reader(csv_file)
+
+		for row in csv_reader:
+			research_node[row[1].rstrip()] = {'year': row[1][:4], 'id': row[0], 'references': {}}
+		
+		return research_node
+
+
+if __name__ == "__main__":
 	main()
