@@ -1,22 +1,22 @@
 import PyPDF2
 import os
-import csv
+import csv 
 
-PDF_DIRECTORY = 'test_pdfs/'
+PDF_DIRECTORY = 'research_pdfs/'
 CSV_DIRECTORY = 'node_csvs/'
-NODE_CSV_NAME = 'test.csv'
+NODE_CSV_NAME = 'research_nodes.csv'
 
 
 def main():
 
 	research_node = create_nodes_from_csv(CSV_DIRECTORY + NODE_CSV_NAME)
 
-	print(research_node)
-
 	for filename in os.listdir(PDF_DIRECTORY):
 		if filename != '.DS_Store':
 			# print_pdf_contents(PDF_DIRECTORY, filename)
 			map_citation_network(research_node, PDF_DIRECTORY, filename)
+
+	print(research_node)
 
 
 def print_pdf_contents(directory_name, filename):
@@ -35,19 +35,27 @@ def print_pdf_contents(directory_name, filename):
 def map_citation_network(research_node, directory_name, filename):
 
 	pdf_object = open(directory_name + filename, 'rb')
-	pdf_reader = PyPDF2.PdfFileReader(pdf_object)
 
-	paper_date = filename[:4]
+	try:
+		pdf_reader = PyPDF2.PdfFileReader(pdf_object)
 
-	for page_number in range(pdf_reader.numPages):
-		page_object = pdf_reader.getPage(page_number)
-		print(page_object.extractText())
+		paper_date = filename[:4]
+
+		for page_number in range(pdf_reader.numPages):
+			page_object = pdf_reader.getPage(page_number)
+			calculate_references(research_node, page_object.extractText(), filename, paper_date)
+
+	except TypeError:
+		print('Invalid PDF: ', filename)
 
 
-def calculate_references(research_node, file_text):
+def calculate_references(research_node, file_text, filename, paper_date):
 
 	for key, value in research_node.iteritems():
-		
+		if (not isinstance(file_text, unicode)):
+			print (type(file_text))
+		# if int(key[:4]) <= int(paper_date) and key[5:] in (file_text, 'utf-8'):
+		# 	research_node[filename[:-4]]['references'].update({key: True});
 
 
 def create_nodes_from_csv(csv_filename):
