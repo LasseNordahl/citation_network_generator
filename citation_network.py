@@ -2,9 +2,9 @@ import PyPDF2
 import os
 import csv 
 
-PDF_DIRECTORY = 'research_pdfs/'
+PDF_DIRECTORY = 'smaller_sample_pdfs/'
 CSV_DIRECTORY = 'node_csvs/'
-NODE_CSV_NAME = 'research_nodes.csv'
+NODE_CSV_NAME = 'smaller_sample_nodes.csv'
 
 
 def main():
@@ -47,15 +47,17 @@ def map_citation_network(research_node, directory_name, filename):
 
 	except TypeError:
 		print('Invalid PDF: ', filename)
+	except:
+		print ('Pdf Read Error', filename)
 
 
 def calculate_references(research_node, file_text, filename, paper_date):
-
 	for key, value in research_node.iteritems():
-		if (not isinstance(file_text, unicode)):
-			print (type(file_text))
-		# if int(key[:4]) <= int(paper_date) and key[5:] in (file_text, 'utf-8'):
-		# 	research_node[filename[:-4]]['references'].update({key: True});
+		author_name = key[5:]
+		author_date = int(key[:4])
+		if author_date < int(paper_date) and author_name in file_text:
+			print('found ', author_name, ' in ', filename)
+		 	research_node[filename[:-4]]['references'].update({key: True});
 
 
 def create_nodes_from_csv(csv_filename):
