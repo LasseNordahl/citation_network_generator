@@ -16,7 +16,7 @@ def main():
 			# print_pdf_contents(PDF_DIRECTORY, filename)
 			map_citation_network(research_node, PDF_DIRECTORY, filename)
 
-	print(research_node)
+	print_research_node(research_node)
 
 
 def print_pdf_contents(directory_name, filename):
@@ -72,6 +72,16 @@ def create_nodes_from_csv(csv_filename):
 			research_node[row[1].rstrip()] = {'year': row[1][:4], 'id': row[0], 'references': {}}
 		
 		return research_node
+
+
+def print_research_node(research_node):
+	for key, value in research_node.iteritems():
+		print(key, ' references ')
+		print(value['references'])
+		print()
+		# for key_two, value_two in value['references']:
+		# 	print(key_two)
+		# print()
 
 
 if __name__ == "__main__":
