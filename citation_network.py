@@ -1,4 +1,5 @@
 import PyPDF2
+import networkx
 import os
 import csv 
 
@@ -55,9 +56,13 @@ def calculate_references(research_node, file_text, filename, paper_date):
 	for key, value in research_node.iteritems():
 		author_name = key[5:]
 		author_date = int(key[:4])
-		if author_date < int(paper_date) and author_name in file_text:
+		if contains_citation(author_date, author_name, file_text, paper_date):
 			print('found ', author_name, ' in ', filename)
 		 	research_node[filename[:-4]]['references'].update({key: True});
+
+
+def contains_citation(checking_author_date, checking_author_name, file_text, file_date):
+	return checking_author_date < int(file_date) and checking_author_name in file_text
 
 
 def create_nodes_from_csv(csv_filename):
