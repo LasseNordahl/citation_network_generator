@@ -30,8 +30,7 @@ def print_pdf_contents(directory_name, filename):
 			page_object = pdf_reader.getPage(page_number)
 			print(page_object.extractText())
 	except:
-		print(o_file, 'broken file') 
-
+		print('unsupported file')
 
 def map_citation_network(research_node, directory_name, filename):
 
@@ -58,7 +57,7 @@ def calculate_references(research_node, file_text, filename, paper_date):
 		author_date = int(key[:4])
 		if contains_citation(author_date, author_name, file_text, paper_date):
 			print('found ', author_name, ' in ', filename)
-		 	research_node[filename[:-4]]['references'].update({key: True});
+		 	research_node[filename[:-4]]['references'].update({key: True})
 
 
 def contains_citation(checking_author_date, checking_author_name, file_text, file_date):
