@@ -1,7 +1,12 @@
 import PyPDF2
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
 import networkx
 import os
 import csv 
+
+plotly.tools.set_credentials_file(username='lassenordahl', api_key='xsorGpccQaRkt0JVAXec')
 
 PDF_DIRECTORY = 'smaller_sample_pdfs/'
 CSV_DIRECTORY = 'node_csvs/'
